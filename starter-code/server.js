@@ -3,7 +3,7 @@
 // TODO: Install and require the NPM Postgres package 'pg' into your server.js, and ensure that it is then listed as a dependency in your package.json
 const fs = require('fs');
 const express = require('express');
-
+const pg = require('pg');
 // REVIEW: Require in body-parser for post requests in our server. If you want to know more about what this does, read the docs!
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
@@ -19,7 +19,7 @@ const conString = 'postgres://localhost:5432';
 //       This is how it knows the URL and, for Windows and Linux users, our username and password for our
 //       database when client.connect is called on line 26. Thus, we need to pass our conString into our
 //       pg.Client() call.
-const client = new pg.Client('something needs to go here... read the instructions above!');
+const client = new pg.Client(conString);
 
 // REVIEW: Use the client object to connect to our DB.
 client.connect();
@@ -36,6 +36,7 @@ app.get('/new', function(request, response) {
   // COMMENT: What number(s) of the full-stack-diagram.png image correspond to the following line of code? Identify which line(s) of code from the client-side blog app are interacting with this particular piece of `server.js`, and the name of the method. Do those lines of code interact with or invoke a different portion of the blog, and if so, where? What part of CRUD is being enacted/managed by this particular piece of code?
   // Put your response here...
   response.sendFile('new.html', {root: './public'});
+  //The line above is interracting with number 5, or the response on the client side to send files to the server. and yes, these lines of code invoke a different portion of the blog, which is the new.thml file. This part of CRUD is the R, or read, which is the http equivelent get method being used.
 });
 
 
@@ -43,6 +44,8 @@ app.get('/new', function(request, response) {
 app.get('/articles', function(request, response) {
   // COMMENT: What number(s) of the full-stack-diagram.png image correspond to the following line of code? Identify which line(s) of code from the client-side blog app are interacting with this particular piece of `server.js`, and the name of the method. Do those lines of code interact with or invoke a different portion of the blog, and if so, where? What part of CRUD is being enacted/managed by this particular piece of code?
   // Put your response here...
+  //The line below is interracting with numbers 3 and 4 , or the query and result from the server to the database to query information and send the result back to the server. These lines of code do not invoking or interacting with other methods on the page. This part of CRUD is the R, or read, which is the http equivelent get method used here.
+  //
   client.query('SELECT * FROM articles')
   .then(function(result) {
     response.send(result.rows);
